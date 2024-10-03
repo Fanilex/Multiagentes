@@ -34,18 +34,16 @@ def LineaBresenham(x1, x2, y1, y2):
     dY = y2 - y1
     dX = x2 - x1
 
-    #SI el diferencial de DY es mayor o igual a 0
+    # Si el diferencial de DY es mayor o igual a 0
     if dY >= 0:
         IncYi = 1
-    #SI el diferencial de DY es menor a 0
     else:
         dY = -dY
         IncYi = -1
     
-    #SI el diferencia de DX es mayor o igual a 0
+    # Si el diferencial de DX es mayor o igual a 0
     if dX >= 0:
         IncXi = 1
-    #SI el diferencial de DX es menor a 0
     else:
         dX = -dX
         IncXi = -1
@@ -62,11 +60,7 @@ def LineaBresenham(x1, x2, y1, y2):
         
     # determinar cuándo avanzar en una dirección recta
     avR = 2 * dY
-    
-    #cuán lejos estamos de la línea ideal en cada paso
     av = avR - dX
-    
-    #se utiliza cuando hacemos un avance inclinado
     avI = av - dX
 
     # Valores iniciales
@@ -74,31 +68,22 @@ def LineaBresenham(x1, x2, y1, y2):
     y = y1
 
     glBegin(GL_POINTS)
-    
     while x != x2 or y != y2:
-        #Se dibuja
         glVertex2f(x, y)
-        
-        #Si la distancia de la línea ideal es mayor o igual a cero
         if av >= 0:
-            x += IncXi  # Incremento en x inclinado
-            y += IncYi  # Incremento en y inclinado
-            av += avI   # Actualizamos error
-            
-        #Si la distancia de la línea ideal es menor a cer0
+            x += IncXi
+            y += IncYi
+            av += avI
         else:
-            x += IncXr  # Incremento en x recto
-            y += IncYr  # Incremento en y recto
-            av += avR   # Actualizamos error
-    
-    # Dibujamos el último punto
-    glVertex2f(x2, y2)  
+            x += IncXr
+            y += IncYr
+            av += avR
+    glVertex2f(x2, y2)
     glEnd()
     
 def plot_function(x1, x2, y1, y2):
     glColor3f(0.0, 0.0, 1.0)
-    LineaBresenham(-200, -100, 200, 100) 
-    LineaBresenham(-300, 150, 300, -150)
+    LineaBresenham(x1, x2, y1, y2)  # Utiliza los parámetros proporcionados
 
 def init():
     screen = pygame.display.set_mode(
@@ -124,9 +109,8 @@ while not done:
 
     glClear(GL_COLOR_BUFFER_BIT)
     Axis()
-    plot_function()  
+    plot_function(-200, 200, -100, 100)  # Ejemplo con coordenadas específicas
     pygame.display.flip()
     pygame.time.wait(100)
 
 pygame.quit()
-#pruebs
