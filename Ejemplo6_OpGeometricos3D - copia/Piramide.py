@@ -26,7 +26,7 @@ class Piramide:
         self.delta = np.array([0.0, 0.0, 0.0])
         self.theta = 0.0
         self.delta_theta = 1.0
-        self.rotAxis = np.array([1.0, 0.0, 0.0])
+        self.rotAxis = np.array([1.0, 1.0, 1.0])
         self.scale = 1.0
         self.delta_scale = 0.01
         self.newdeg = lambda deg, delta_deg: deg + delta_deg if deg + delta_deg < 360.0 else (deg + delta_deg) % 360.0
@@ -72,8 +72,8 @@ class Piramide:
 
         # Coordenadas X y Z
         self.position[0] = (a * math.sqrt(2) * math.cos(t)) / denom
-        self.position[2] = (a * math.sqrt(2) * math.cos(t) * math.sin(t)) / denom
         self.position[1] = 0.0  
+        self.position[2] = (a * math.sqrt(2) * math.cos(t) * math.sin(t)) / denom
 
         # Actualizar theta para la rotación
         self.theta = self.newdeg(self.theta, self.delta_theta)

@@ -91,33 +91,25 @@ class OpMat:
         elif x == 0.0 and y == 0.0 and z == 1.0:
             self.rotateZ(theta)
         else:
-            # Normalización
-            axis = np.array([x, y, z])
-            axis = axis / np.linalg.norm(axis)
-            x = axis[0]
-            y = axis[1]
-            z = axis[2]
-            
-            #se hace lo del vector unitario
-            rad = math.radians(theta)
-            cos_theta = math.cos(rad)
-            sin_theta = math.sin(rad)
-            one_minus_cos = 1.0 - cos_theta
+            magnitud = math.sqrt( ((x**2) + (y**2) + (z**2)) )
 
-            # Matriz de rotación con la formulota
+            a = x/magnitud
+            b = y/magnitud
+            c = z/magnitud
+            d = math.sqrt(((b**2)+(c**2)))
+            cos_theta = math.cos(math.radians(theta))
+            sin_theta = math.sin(math.radians(theta))
+            a_2 = a*a
+            b_2 = b*b
+            c_2 = c*c
+            d_2 = d*d
             self.R = np.array([
-                [cos_theta + x*x*one_minus_cos,
-                 x*y*one_minus_cos - z*sin_theta,
-                 x*z*one_minus_cos + y*sin_theta, 0],
-                [y*x*one_minus_cos + z*sin_theta,
-                 cos_theta + y*y*one_minus_cos,
-                 y*z*one_minus_cos - x*sin_theta, 0],
-                [z*x*one_minus_cos - y*sin_theta,
-                 z*y*one_minus_cos + x*sin_theta,
-                 cos_theta + z*z*one_minus_cos, 0],
-                [0, 0, 0, 1]
+                [d_2*cos_theta+a_2, b*a*(-cos_theta+1)-c*sin_theta, b*sin_theta+c*a*(-cos_theta+1), 0],
+                [c*sin_theta-b*a*cos_theta+b*a, (c_2*cos_theta+b_2*a_2*cos_theta+d_2*b_2)/d_2, (c*(d_2*b-a*(c*sin_theta-b*a*cos_theta))-b*(c*cos_theta+b*a*sin_theta))/d_2, 0],
+                [-b*sin_theta-c*a*cos_theta+c*a, (c*(c*a*sin_theta-b*cos_theta)+b*(c*d_2-a*(-b*sin_theta-c*a*cos_theta)))/d_2, (b_2*cos_theta+c_2*a_2*cos_theta+c_2*d_2)/d_2, 0],
+                [0,0,0,1]
             ])
-            self.M = np.dot(self.R, self.M)
+            self.M @= self.R
     
     def mult_Points(self, points):
         for i in range(len(points)):
